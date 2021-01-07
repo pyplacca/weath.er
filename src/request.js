@@ -1,4 +1,4 @@
-const API_URL = 'http://api.airvisual.com/v2/'
+const API_URL = 'https://api.airvisual.com/v2/'
 
 function Fetch (url) {
 	// const request_options = {
