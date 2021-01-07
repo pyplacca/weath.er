@@ -7,6 +7,8 @@ import icons from './components/icons.js'
 import './App.scss';
 
 
+console.log(process.env)
+
 class App extends React.Component {
 	constructor (props) {
 		super(props)
@@ -26,10 +28,10 @@ class App extends React.Component {
 				city: '',
 			}
 		}
-
-		this.fetchCountryStates = this.fetchCountryStates.bind(this)
-		this.fetchStateCities = this.fetchStateCities.bind(this)
-		this.fetchWeatherData = this.fetchWeatherData.bind(this)
+		// method bindings
+		this.getWeatherData = this.getWeatherData.bind(this)
+		this.getCountryStates = this.getCountryStates.bind(this)
+		this.getStateCities = this.getStateCities.bind(this)
 	}
 
 	async componentDidMount () {
@@ -42,8 +44,7 @@ class App extends React.Component {
 		}
 	}
 
-	async fetchCountryStates (country) {
-		// fetch country states
+	async getCountryStates (country) {
 		const res = await APIrequest.getStates(country)
 		if (res) {
 			this.setState({
@@ -54,7 +55,7 @@ class App extends React.Component {
 		}
 	}
 
-	async fetchStateCities (state) {
+	async getStateCities (state) {
 		const {data} = await APIrequest.getCities(this.state.current.country, state)
 		this.setState({
 			cities: data.map(obj => obj.city),
@@ -62,7 +63,7 @@ class App extends React.Component {
 		})
 	}
 
-	async fetchWeatherData (city) {
+	async getWeatherData (city) {
 		const {country, state} = this.state.current
 		const res =  await APIrequest.getWeather(country, state, city)
 		if (res) {
@@ -78,20 +79,22 @@ class App extends React.Component {
 		const { countries, weather_data, country_states, cities } = this.state
 		const { ts, tp, ic } = weather_data.current.weather
 		const { type='' } = weather_codes[ic] || {}
-		console.log(ic)
+		// pick a background image based on weather type
+		const bg_name = type.split(' ').join('-') || 'mist'
+		// darken sidebar's background color if background image is light
+		const aside_bg = bg_name.includes('clouds') ? 'rgba(59, 59, 59, .2)' : ''
 		return (
 			<div
 				className="App"
-				bg-name={type.split(' ').join('-') || 'shower-rain'}
+				bg-name={bg_name}
 			>
 				<main>
 					<header>
 						<h4 className="app-logo">Weath.er</h4>
-
 						<Select
 							cls="countries"
 							options={countries}
-							callback={this.fetchCountryStates}
+							callback={this.getCountryStates}
 							collapsible={true}
 						>
 							<div className="selection">
@@ -109,23 +112,24 @@ class App extends React.Component {
 					/>
 				</main>
 
-				<aside>
+				<aside style={{backgroundColor:aside_bg}}>
+					{/* <icons.chevron /> */}
 					<Select
-						cls="states"
+						cls="state"
 						options={country_states}
 						collapsible={false}
-						callback={this.fetchStateCities}
+						callback={this.getStateCities}
 					>
-						<h3 className="title">States</h3>
+						<h3 className="title">State/Region</h3>
 					</Select>
 
 					<Select
-						cls="cities"
+						cls="city"
 						options={cities}
 						collapsible={false}
-						callback={this.fetchWeatherData}
+						callback={this.getWeatherData}
 					>
-						<h3 className="title">Cities</h3>
+						<h3 className="title">City</h3>
 					</Select>
 
 					<div className="weather-details">
