@@ -16,9 +16,9 @@ export default class Select extends React.Component {
 			if (previous) {
 				previous.classList.remove('selected')
 			}
-			// mark newly selected option
+			// mark current option as selected
 			target.classList.add('selected')
-			// change selection value
+			// change selection (if any) value
 			const selection = this._ancestor.current.querySelector('.selection')
 			if (selection) {
 				selection.firstElementChild.innerText = target.innerText
