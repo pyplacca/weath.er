@@ -7,8 +7,6 @@ import icons from './components/icons.js'
 import './App.scss';
 
 
-console.log(process.env)
-
 class App extends React.Component {
 	constructor (props) {
 		super(props)
