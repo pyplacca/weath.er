@@ -1,3 +1,5 @@
+const API_URL = 'http://api.airvisual.com/v2/'
+
 function Fetch (url) {
 	// const request_options = {
 	// 	method: 'GET',
@@ -17,7 +19,7 @@ const APIrequest = {
 	getWeather (country, state, city) {
 		return Fetch(
 			`
-			${process.env.REACT_APP_API_URL}city?
+			${API_URL}city?
 			city=${city}&
 			state=${state}&
 			country=${country}&
@@ -29,7 +31,7 @@ const APIrequest = {
 	getCountries () {
 		return Fetch(
 			`
-			${process.env.REACT_APP_API_URL}countries?
+			${API_URL}countries?
 			key=${process.env.REACT_APP_API_KEY}
 			`,
 		)
@@ -38,7 +40,7 @@ const APIrequest = {
 	getStates (country) {
 		return Fetch(
 			`
-			${process.env.REACT_APP_API_URL}states?
+			${API_URL}states?
 			country=${country}&
 			key=${process.env.REACT_APP_API_KEY}
 			`
@@ -48,7 +50,7 @@ const APIrequest = {
 	getCities (country, state) {
 		return Fetch(
 			`
-			${process.env.REACT_APP_API_URL}cities?
+			${API_URL}cities?
 			state=${state}&
 			country=${country}&
 			key=${process.env.REACT_APP_API_KEY}
